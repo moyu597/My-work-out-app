@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const Workout = require('./workoutModel'); // Make sure to replace 'path_to_your_model' with the actual path to your model file
 
-const MONGO_URI = 'mongodb+srv://Moyu597:helen2016@moyu597.3jagzki.mongodb.net/Moyu597?retryWrites=true&w=majority'; // Replace 'your_database_name' if needed
+const MONGO_URI = process.env.MONGO_URI; // Replace 'ur_database_name' if needed
 
 mongoose.connect(MONGO_URI, {
   useNewUrlParser: true,
