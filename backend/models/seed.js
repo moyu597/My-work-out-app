@@ -1,11 +1,7 @@
 const mongoose = require('mongoose');
 const Workout = require('./workoutModel'); // Make sure to replace 'path_to_your_model' with the actual path to your model file
 
-<<<<<<< HEAD
 const MONGO_URI = process.env.MONGO_URI; // Replace 'ur_database_name' if needed
-=======
-const MONGO_URI = 'mongodb+srv://Onyema_07:Onyema_07@testcluster1.6edzl.mongodb.net/your_database_name'; // Replace 'your_database_name' if needed
->>>>>>> parent of 967733c (update)
 
 mongoose.connect(MONGO_URI, {
   useNewUrlParser: true,
@@ -13,7 +9,7 @@ mongoose.connect(MONGO_URI, {
 });
 
 // ... (rest of the script remains unchanged)
-// Seed Data
+// Seed Data for injection
 const seedWorkouts = [
     { title: "Push-ups", reps: 15, load: 0 },
     { title: "Squats", reps: 20, load: 0 },
