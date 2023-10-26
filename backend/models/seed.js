@@ -9,7 +9,7 @@ mongoose.connect(MONGO_URI, {
 });
 
 // ... (rest of the script remains unchanged)
-// Seed Data for injection
+// Seed Data 
 const seedWorkouts = [
     { title: "Push-ups", reps: 15, load: 0 },
     { title: "Squats", reps: 20, load: 0 },
