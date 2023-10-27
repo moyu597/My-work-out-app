@@ -5,7 +5,6 @@ pipeline {
         DOCKER_CREDENTIALS_ID = 'dockerhub_id' // Docker Hub credentials
         FRONTEND_DOCKER_IMAGE = 'my-workout-app-frontend' // Name of your frontend image
         BACKEND_DOCKER_IMAGE = 'my-workout-app-backend' // Name of your backend image
-        MONGODB_URI = credentials('MongoDBURI') // MongoDB  credentials
     }
 
     stages {
@@ -19,11 +18,13 @@ pipeline {
 
         stage('Build backend') { // Stage for building the backend
             steps {
-                dir('backend') { // Change to 'backend' directory
-                    sh '''
-                        npm install // Install npm dependencies for the backend
-                        export MONGODB_URI=$MONGODB_URI // Export the MongoDB URI as an environment variable
-                    '''
+                withCredentials([string(credentialsId: 'MONGO_URI', variable: 'MONGODB_URI')]) {
+                    dir('backend') { // Change to 'backend' directory
+                        sh '''
+                            npm install // Install npm dependencies for the backend
+                            echo MONGODB_URI=$MONGODB_URI // Export the MongoDB URI as an environment variable
+                        '''
+                    }
                 }
             }
         }
