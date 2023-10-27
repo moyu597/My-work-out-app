@@ -1,5 +1,12 @@
 # Use an official Node.js runtime as a parent image
-FROM node:14
+FROM node:14.15.4-slim
+
+
+# add maintainer label
+LABEL maintainer="moyu597"
+
+# create a non root user
+RUN useradd backend && mkdir /app && chown backend:backend /app
 
 # Set the working directory in the container
 WORKDIR /app
@@ -16,5 +23,9 @@ COPY . .
 # Expose the port your application will listen on
 EXPOSE 4000
 
+# Add user backend
+USER backend
+ 
+ENV MONGO_URI=""
 # Command to run your Node.js application
-CMD [ "node", "server.js" ]
+CMD [ "npm" ,"start"]
