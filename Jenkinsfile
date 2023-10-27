@@ -3,11 +3,11 @@ pipeline {
 
     environment {
         DOCKER_HUB_CREDENTIALS = credentials('dockerhub_id') // Docker Hub credentials
-        FRONTEND_IMAGE = 'Dockerfile' // Name of your frontend image
-        BACKEND_IMAGE = 'Dockerfile'// Name of your backend image
+        FRONTEND_IMAGE = 'my-workout-app-frontend' // Name of your frontend image
+        BACKEND_IMAGE = 'my-workout-app-backend' // Name of your backend image
         FRONTEND_DIRECTORY = 'frontend' // Frontend directory
         BACKEND_DIRECTORY = 'backend' // Backend directory
-        DOCKER_REGISTRY_URL = 'https://docker.io' // Your Docker registry URL
+        DOCKER_REGISTRY_URL = 'https://index.docker.io/v1/' // Your Docker registry URL
     }
 
     stages {
@@ -19,15 +19,11 @@ pipeline {
             }
         }
 
-        // Add a new stage for MongoDB URI
         stage('Use MongoDB URI') {
             steps {
                 script {
-                    // Retrieve MongoDB URI from Jenkins Credentials
                     MONGO_URI = credentials('MongoDBURI')
-                    // Use the MONGO_URI environment variable in your build steps
                     sh "echo MONGO_URI is $MONGO_URI"
-                    // Add your MongoDB-related build steps here
                 }
             }
         }
@@ -55,7 +51,6 @@ pipeline {
         stage('Push Docker Images') {
             steps {
                 script {
-                    // Use Docker Hub credentials stored in Jenkins Credentials
                     withCredentials([usernamePassword(credentialsId: 'docker-hub-username', passwordVariable: 'DOCKER_HUB_CREDENTIALS')]) {
                         docker.withRegistry("${DOCKER_REGISTRY_URL}", "DOCKER_HUB_CREDENTIALS") {
                             docker.image("${FRONTEND_IMAGE}:${BUILD_NUMBER}").push()
@@ -66,15 +61,12 @@ pipeline {
             }
         }
     }
-        
 
     post {
         always {
             script {
-                docker.image("${FRONTEND_IMAGE}:${BUILD_NUMBER}").stop()
-                docker.image("${FRONTEND_IMAGE}:${BUILD_NUMBER}").remove()
-                docker.image("${BACKEND_IMAGE}:${BUILD_NUMBER}").stop()
-                docker.image("${BACKEND_IMAGE}:${BUILD_NUMBER}").remove()
+                sh "docker rmi ${FRONTEND_IMAGE}:${BUILD_NUMBER}"
+                sh "docker rmi ${BACKEND_IMAGE}:${BUILD_NUMBER}"
             }
         }
     }
