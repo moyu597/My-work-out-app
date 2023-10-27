@@ -1,25 +1,24 @@
 pipeline {
-    agent any // This pipeline can be executed on any available agent
-
+    agent any 
     environment {
-        DOCKER_CREDENTIALS_ID = 'dockerhub_id' // Docker Hub credentials
-        FRONTEND_DOCKER_IMAGE = 'my-workout-app-frontend' // Name of your frontend image
-        BACKEND_DOCKER_IMAGE = 'my-workout-app-backend' // Name of your backend image
+        DOCKER_CREDENTIALS_ID = 'dockerhub_id' 
+        FRONTEND_DOCKER_IMAGE = 'my-workout-app-frontend' 
+        BACKEND_DOCKER_IMAGE = 'my-workout-app-backend'
     }
 
     stages {
-        stage('Checkout') { // Stage for checking out the source code from the SCM
+        stage('Checkout') { 
             steps {
                 script {
-                    checkout scm // Check out the source code from the configured SCM
+                    checkout scm 
                 }
             }
         }
 
-        stage('Build backend') { // Stage for building the backend
+        stage('Build backend') { 
             steps {
                 withCredentials([string(credentialsId: ' MongoDBURI', variable: 'MONGODB_URI')]) {
-                    dir('backend') { // Change to 'backend' directory
+                    dir('backend') { 
                         sh '''
                             npm install #Install npm dependencies for the backend
                             echo MongoDBURI: ${MONGODB_URI} # Export the MongoDB URI as an environment variable
@@ -29,9 +28,9 @@ pipeline {
             }
         }
 
-        stage('Build Frontend') { // Stage for building the frontend
+        stage('Build Frontend') { 
             steps {
-                dir('frontend') { // Change to 'frontend' directory
+                dir('frontend') { 
                     sh '''
                         npm install #Install npm dependencies for the frontend
                     '''
@@ -39,18 +38,18 @@ pipeline {
             }
         }
 
-        stage('Build Images') { // Stage for building Docker images
+        stage('Build Images') { 
             steps {
                 script {
-                    dockerImageBackend = docker.build("${BACKEND_DOCKER_IMAGE}:$BUILD_NUMBER", './backend') // Build Docker image for the backend and tag it with build number
-                    dockerImageFrontend = docker.build("${FRONTEND_DOCKER_IMAGE}:$BUILD_NUMBER", './frontend') // Build Docker image for the frontend and tag it with build number
+                    dockerImageBackend = docker.build("${BACKEND_DOCKER_IMAGE}:$BUILD_NUMBER", './backend') 
+                    dockerImageFrontend = docker.build("${FRONTEND_DOCKER_IMAGE}:$BUILD_NUMBER", './frontend') 
                 }
             }
         }
 
-        stage('Push Images to DockerHub') { // Stage for pushing Docker images to DockerHub
+        stage('Push Images to DockerHub') { 
             steps {
-                withCredentials([usernamePassword(credentialsId: "${DOCKER_CREDENTIALS_ID}", usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) { // Retrieve DockerHub credentials from Jenkins credential store
+                withCredentials([usernamePassword(credentialsId: "${DOCKER_CREDENTIALS_ID}", usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) { 
                     script {
                         sh '''
                             echo "${DOCKER_PASSWORD}" | docker login -u "${DOCKER_USERNAME}" --password-stdin # Login to DockerHub using the retrieved credentials
