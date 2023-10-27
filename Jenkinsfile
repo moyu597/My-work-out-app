@@ -19,15 +19,6 @@ pipeline {
             }
         }
 
-        stage('Use MongoDB URI') {
-            steps {
-                script {
-                    MONGO_URI = credentials('MongoDBURI')
-                    sh "echo MONGO_URI is $MONGO_URI"
-                }
-            }
-        }
-    
         stage('Build Backend') {
             steps {
                 dir("${BACKEND_DIRECTORY}") {
@@ -57,6 +48,14 @@ pipeline {
                             docker.image("${BACKEND_IMAGE}:${BUILD_NUMBER}").push()
                         }
                     }
+                }
+            }
+        }
+
+        stage('Run Backend Container') {
+            steps {
+                withCredentials([string(credentialsId: 'MongoDBURI', variable: 'MONGO_URI')]) {
+                    sh "docker run -e MONGO_URI=$MONGO_URI -p 8080:8080 -d ${BACKEND_IMAGE}:${BUILD_NUMBER}"
                 }
             }
         }
