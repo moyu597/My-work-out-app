@@ -18,11 +18,11 @@ pipeline {
 
         stage('Build backend') { // Stage for building the backend
             steps {
-                withCredentials([string(credentialsId: 'MongoDBURI', variable: 'MONGODB_URI')]) {
+                withCredentials([string(credentialsId: ' MongoDBURI', variable: 'MONGODB_URI')]) {
                     dir('backend') { // Change to 'backend' directory
                         sh '''
-                            npm install // Install npm dependencies for the backend
-                            echo MongoDBURI=${MONGODB_URI} // Export the MongoDB URI as an environment variable
+                            npm install #Install npm dependencies for the backend
+                            echo MongoDBURI: ${MONGODB_URI} # Export the MongoDB URI as an environment variable
                         '''
                     }
                 }
@@ -33,7 +33,7 @@ pipeline {
             steps {
                 dir('frontend') { // Change to 'frontend' directory
                     sh '''
-                        npm install // Install npm dependencies for the frontend
+                        npm install #Install npm dependencies for the frontend
                     '''
                 }
             }
@@ -53,7 +53,7 @@ pipeline {
                 withCredentials([usernamePassword(credentialsId: "${DOCKER_CREDENTIALS_ID}", usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) { // Retrieve DockerHub credentials from Jenkins credential store
                     script {
                         sh '''
-                            echo "${DOCKER_PASSWORD}" | docker login -u "${DOCKER_USERNAME}" --password-stdin // Login to DockerHub using the retrieved credentials
+                            echo "${DOCKER_PASSWORD}" | docker login -u "${DOCKER_USERNAME}" --password-stdin # Login to DockerHub using the retrieved credentials
 
                             docker tag ${BACKEND_DOCKER_IMAGE}:$BUILD_NUMBER ${BACKEND_DOCKER_IMAGE}:$BUILD_NUMBER 
                             docker push ${BACKEND_DOCKER_IMAGE}:$BUILD_NUMBER 
