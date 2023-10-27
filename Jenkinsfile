@@ -26,11 +26,11 @@ pipeline {
 
         stage('Backend Tests') {
             steps {
-                withCredentials([string(credentialsId: 'MongoDBURI', variable: 'MONGODB_URI')]) {
+                withCredentials([string(credentialsId: 'MONGODB_URI', variable: 'MONGODB_URI')]) {
                     dir('backend') {
                         sh '''
                             npm install
-                            echo MongoDBURI: "${MONGODB_URI}"
+                            echo MONGODB_URI: "${MONGODB_URI}"
                         '''
                     }
                 }
