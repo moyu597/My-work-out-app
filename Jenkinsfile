@@ -18,11 +18,11 @@ pipeline {
 
         stage('Build backend') { // Stage for building the backend
             steps {
-                withCredentials([string(credentialsId: 'MONGO_URI', variable: 'MONGODB_URI')]) {
+                withCredentials([string(credentialsId: 'MONGO_URI', variable: 'MongoDBURI')]) {
                     dir('backend') { // Change to 'backend' directory
                         sh '''
                             npm install // Install npm dependencies for the backend
-                            echo MONGODB_URI=$MONGODB_URI // Export the MongoDB URI as an environment variable
+                            echo MONGODB_URI=$MongoDBURI // Export the MongoDB URI as an environment variable
                         '''
                     }
                 }
