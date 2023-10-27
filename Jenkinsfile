@@ -3,8 +3,8 @@ pipeline {
 
     environment {
         DOCKER_HUB_CREDENTIALS = credentials('dockerhub_id') // Docker Hub credentials
-        FRONTEND_IMAGE = Dockerfile // Name of your frontend image
-        BACKEND_IMAGE = Dockerfile // Name of your backend image
+        FRONTEND_IMAGE = 'Dockerfile' // Name of your frontend image
+        BACKEND_IMAGE = 'Dockerfile'// Name of your backend image
         FRONTEND_DIRECTORY = 'frontend' // Frontend directory
         BACKEND_DIRECTORY = 'backend' // Backend directory
         DOCKER_REGISTRY_URL = 'https://docker.io' // Your Docker registry URL
@@ -78,4 +78,4 @@ pipeline {
             }
         }
     }
-
+}
