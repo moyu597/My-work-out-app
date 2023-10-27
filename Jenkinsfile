@@ -22,7 +22,7 @@ pipeline {
                     dir('backend') { // Change to 'backend' directory
                         sh '''
                             npm install // Install npm dependencies for the backend
-                            echo MongoDBURI=$MONGODB_URI // Export the MongoDB URI as an environment variable
+                            echo MongoDBURI=${MONGODB_URI} // Export the MongoDB URI as an environment variable
                         '''
                     }
                 }
