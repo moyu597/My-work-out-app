@@ -7,7 +7,7 @@ pipeline {
         BACKEND_IMAGE = 'my-workout-app-backend' // Name of your backend image
         FRONTEND_DIRECTORY = 'frontend' // Frontend directory
         BACKEND_DIRECTORY = 'backend' // Backend directory
-        DOCKER_REGISTRY_URL = 'https://hub.docker.com/' // Your Docker registry URL
+        DOCKER_REGISTRY_URL = 'docker.io' // Your Docker registry URL
     }
 
     stages {
