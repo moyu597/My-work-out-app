@@ -1,5 +1,5 @@
 # Use an official Node.js runtime as a parent image
-FROM node:14.15.4-slim
+FROM node:20.5.0-slim
 
 # add maintainer label
 LABEL maintainer="moyu597"
