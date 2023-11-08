@@ -19,11 +19,11 @@ COPY package*.json ./
 # Install application dependencies
 RUN npm install
 
+# Create the /app/node_modules/.cache directory and set its ownership
+RUN mkdir -p /app/node_modules/.cache && chown -R frontend:frontend /app/node_modules/.cache
+
 # Copy the rest of your application code to the container
 COPY . .
-
-# Set permissions for /app/node_modules/.cache
-RUN chown -R frontend:frontend /app/node_modules/.cache
 
 # Expose the port your frontend runs on within the container (e.g., 3000)
 EXPOSE 3000
