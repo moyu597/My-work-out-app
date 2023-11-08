@@ -1,11 +1,14 @@
 # Use an official Node.js runtime as a parent image
-FROM node:20.5.0-slim 
+FROM node:20.5.0-slim
 
-# add maintainer label
+# Add maintainer label
 LABEL maintainer="moyu597"
 
-# create a non root user
-RUN useradd frontend && mkdir /app && chown frontend:frontend /app
+# Create a non-root user
+RUN useradd frontend
+
+# Create the /app directory and set its permissions
+RUN mkdir /app && chown frontend:frontend /app
 
 # Set the working directory in the container
 WORKDIR /app
@@ -19,11 +22,13 @@ RUN npm install
 # Copy the rest of your application code to the container
 COPY . .
 
+# Set permissions for /app/node_modules/.cache
+RUN chown -R frontend:frontend /app/node_modules/.cache
+
 # Expose the port your frontend runs on within the container (e.g., 3000)
 EXPOSE 3000
 
-
-# Add user backend
+# Add user frontend
 USER frontend
 
 # Command to run your frontend application
